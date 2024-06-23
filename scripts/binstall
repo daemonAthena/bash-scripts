@@ -1,0 +1,71 @@
+#!/bin/bash
+
+function main () {
+  verify $@
+  binary_install $@
+  exit 0
+}
+
+function binary_install () {
+  # Will install to a local .bin directory by default
+  binpath="$HOME/.bin"
+
+  if [[ $1 == "--global" ]]; then
+    # Will install to /usr/bin so that the program is available for all users
+    echo "installing to /usr/bin"
+    shift
+    for sourcefile in $@; do
+      if [[ -d $sourcefile ]]; then
+        sudo install -v $sourcefile/* /usr/local/bin
+      else
+        sudo install -v $sourcefile /usr/local/bin
+      fi
+    done
+  # If local is flagged then the arguments are shifted so the files can be read
+  elif [[ "$1" == "--local" ]] && shift || [[ $1 != "" ]]; then
+    echo "installing binaries locally"
+    mkdir -p $binpath
+    for sourcefile in $@; do
+      if [[ -d $sourcefile ]]; then
+        install -v $sourcefile/* $binpath
+      else
+        install -v $sourcefile $binpath
+      fi
+    done
+    # Set PATH env var to contain ~/.bin by default and update
+      if grep -q 'export PATH=$PATH:$HOME/.bin' $HOME/.bash_profile; then
+        exit 0
+      else
+        echo 'export PATH=$PATH:$HOME/.bin' >> $HOME/.bash_profile
+        source $HOME/.bash_profile
+        echo "PATH updated to include $HOME/.bin"
+        exit 0
+      fi
+  else
+    echo "inputs are not file or directory"
+    usage
+    exit 1
+  fi
+}
+
+function verify() {
+  if [[ $@ == *"-h"* ]] || [[ $@ == *"--help"* ]] ; then
+    usage
+    exit 0
+  fi
+}
+
+function usage() {
+cat <<USAGE
+    Usage: [FILE OR DIRECTORY]... [OPTIONS]...
+	
+    Options:
+      --local                  This is the default option, will install the executable to your ~/.bin folder
+      --global                 Requires super user rights, will install the executable to your /usr/local/bin folder which is default for systemwide user added binaries
+      -h | --help              Displays this page
+
+    This script installs binaries to your ~/.bin directory so they can be used in your terminal locally. With the --global flag it will 
+USAGE
+}
+
+main $@
