@@ -1,0 +1,131 @@
+#!/bin/bash
+
+function main() {
+	verification $@
+	create_shortcut $@
+	exit 0
+}
+
+function create_shortcut() {
+	# Default Values
+	exec_path="$(realpath $1)"
+	FILENAME="$(basename """${exec_path%.*}""")" 
+	output_path="$HOME/Desktop/$FILENAME.desktop"
+	use_terminal="false"
+	version="1.0"
+	comment=" "
+	icon="$FILENAME"
+
+# Read arguments
+	shift
+	for arg in "$@"; do
+		case $arg in
+			-o | --output)
+				output_path="$2"
+				shift
+				shift		
+				;;
+			-v | --version)
+				version="$2"
+				shift
+				shift
+				;;
+
+			-t | --terminal)
+				use_terminal=$2
+				shift
+				shift
+				echo "$@"
+				;;
+
+			-c | --comment)
+				comment=$2
+				shift
+				shift
+				;;
+
+			-i | --icon)
+				icon=$2
+				shift
+				shift
+				;;
+
+			*)
+				if [[ -z $arg ]]; then
+					echo "done"
+				elif [[ "$arg" == "-"* ]]; then
+					echo "invalid argument $arg please refer to -h"
+					exit 1
+				fi
+				;;
+
+
+		esac
+	done
+	echo "creating shortcut"
+	touch "$output_path"
+	cat > "$output_path" <<DesktopFile
+[Desktop Entry]
+Version=$version
+Type=Application
+Terminal=$use_terminal
+Exec=$exec_path
+Name=$FILENAME
+Comment=$comment
+Icon=$icon
+DesktopFile
+# Give execution rights
+chmod +x $output_path
+echo "shortcut created at $output_path"
+# Install the desktop file locally
+desktop-file-install --dir=$HOME/.local/share/applications $output_path
+update-desktop-database ~/.local/share/applications
+
+}
+
+
+function usage() {
+    cat <<USAGE
+
+    Usage: [target executable file path] [-o output path] [-v version number] [-t TRUE/FALSE] [-i icon path] [-c comment]
+
+    Options:
+        -o, --output:            choose the file output, by default it is ~/Desktop/[FILENAME]
+	-v, --version:		 specify the version number, by default it is 1.0
+	-t, --terminal:		 specify boolean whether or not the program runs with terminal popup, default is false
+	-i, --icon:		 specify the name of the icon that will be used, by default your system searches $HOME/.icon/[program name]
+	-c, --comment:		 add a comment to the file
+	-h, --help:		 displays this page
+USAGE
+}
+
+function verification() {
+	# Verify there is at least one argument
+	if [ $# -eq 0 ]; then
+		echo "please provide an argument"
+		usage
+		exit 1;
+
+	# If the user input -h then send them help
+	elif [[ $@ == *"-h"* ]] || [[ $@ == *"--help"* ]] ; then
+		usage
+		exit 0;
+
+	# Verify that argument is a directory or file
+	elif ! [[ -f $1 ]]; then
+		echo "$1 is not a file"
+		usage
+		exit 1;
+
+	# Verify that file is executable
+	elif ! [[ -x $1 ]]; then 
+		echo "argument $1 is not executable"	
+		usage
+		exit 1;
+	# Verification successful
+	else
+		return 1;
+	fi
+}
+
+main $@
