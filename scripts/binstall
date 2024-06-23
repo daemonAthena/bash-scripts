@@ -64,7 +64,7 @@ cat <<USAGE
       --global                 Requires super user rights, will install the executable to your /usr/local/bin folder which is default for systemwide user added binaries
       -h | --help              Displays this page
 
-    This script installs binaries to your ~/.bin directory so they can be used in your terminal locally. With the --global flag it will 
+    This script installs binaries to your ~/.bin or /usr/local/bin directory so they can be executed in your terminal.
 USAGE
 }
 

@@ -11,9 +11,11 @@ elif [[ "$1" == "--local" ]] || [[ $1 == "" ]]; then
   mkdir -p $HOME/.bin
   install -v $filepath/scripts/* $HOME/.bin
   # Set PATH env var to contain ~/.bin by default and update
-    if ! grep :$HOME/.bin $HOME/.bash_profile; then
+    if grep -q 'export PATH=$PATH:$HOME/.bin' $HOME/.bash_profile; then
+      echo "PATH includes $HOME/.bin"
+    else
       echo 'export PATH=$PATH:$HOME/.bin' >> $HOME/.bash_profile
-      source $HOME/bash_profile
+      source $HOME/.bash_profile
       echo "PATH updated to include $HOME/.bin"
     fi
 else

@@ -2,10 +2,10 @@
 This is a list of custom bash scripts I made for ease-of-use on my linux system. The plan is to continue expanding this list ideally until it can be used minimally on any arch-based ideally on any mainstream linux distro.
 
 # Current scripts
-NOTE
-> for any script you can specify -h or --help as a flag for an in depth breakdown of options.
+> NOTE: for any script you can specify -h or --help as a flag for an in depth breakdown of options.
 
-- mkdesktop: Creates a basic .desktop file for any executable. Target directory can be specified with -o, it is ~/Desktop by default. It also adds the file to your ~/.local/share/applications directory and updates your desktop database so it will appear in launchers.
+- `mkdesktop`: Creates a basic .desktop file for any executable. Target directory can be specified with -o, it is ~/Desktop by default. It also adds the file to your ~/.local/share/applications directory and updates your desktop database so it will appear in launchers.
+- `binstall`: installs a binary to a local .bin directory (and adds this directory to your PATH if needed), can also add binaries globally with the --global flag.
 
 # How to install
 It's very simple just run the file "install.sh" in your terminal.
