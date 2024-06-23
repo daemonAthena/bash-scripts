@@ -87,8 +87,8 @@ update-desktop-database ~/.local/share/applications
 function usage() {
     cat <<USAGE
 
-    Usage: [target executable file path] [-o output path] [-v version number] [-t TRUE/FALSE] [-i icon path] [-c comment]
-
+    Usage: [FILE]... [OPTIONS]...
+	
     Options:
         -o, --output:            choose the file output, by default it is ~/Desktop/[FILENAME]
 	-v, --version:		 specify the version number, by default it is 1.0
@@ -96,6 +96,8 @@ function usage() {
 	-i, --icon:		 specify the name of the icon that will be used, by default your system searches $HOME/.icon/[program name]
 	-c, --comment:		 add a comment to the file
 	-h, --help:		 displays this page
+
+   This program creates a desktop file for an executable file and installs it in ~/.local/share/applications directory and updates your desktop database so launchers will recognize it.
 USAGE
 }
 
