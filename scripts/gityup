@@ -1,0 +1,13 @@
+#!/bin/bash
+
+message=$1
+
+git add -A
+
+if [[ -z $message ]]; then
+  git commit
+else
+  git commit --message="$message"
+fi
+
+git push origin

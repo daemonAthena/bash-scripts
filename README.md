@@ -6,6 +6,8 @@ This is a list of custom bash scripts I made for ease-of-use on my linux system.
 
 - `mkdesktop`: Creates a basic .desktop file for any executable. Target directory can be specified with -o, it is ~/Desktop by default. It also adds the file to your ~/.local/share/applications directory and updates your desktop database so it will appear in launchers.
 - `binstall`: installs a binary to a local .bin directory (and adds this directory to your PATH if needed), can also add binaries globally with the --global flag.
+- `gityup`: automatically adds, commits (with prompt... -m can also be specified), and pushes your git repo to its origin.
+- `ck3-modinstall`: use with any archive to install a ck3 mod. WIP, requires you to have a logical symlink in ~/Games/ck3-mods pointing to your mods folder in your ~/.local/share/'Paradox Interactive'/'Crusader Kings III'/mod folder. Don't worry about this, I'm mainly keeping it here for my own purposes in case it gets deleted.
 
 # How to install
 It's very simple just run the file "install.sh" in your terminal.

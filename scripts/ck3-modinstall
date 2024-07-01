@@ -1,0 +1,44 @@
+#!/bin/bash
+# Depends on atool
+
+modhome="$HOME/Games/ck3-mods" #Final Location
+zipfile="$1" # Archive Input
+
+archive_output=${zipfile// /-}
+archive_output=${archive_output%.*}
+
+#Mod Output
+
+get_mod_name () {
+  echo $1
+  moddir=$1
+  modfile=$moddir/descriptor.mod
+  modname=$(grep name= $modfile || echo "grep failed")
+  if [[ "$modname" = "grep failed" ]]; then
+	  echo ""
+  else
+    modname=${modname#"name="}
+    # renaming descriptor to $modname
+    echo "$modname"
+  fi
+  echo "failure"
+  exit 1
+}
+
+
+atool "$zipfile" --extract-to="$archive_output"
+# Autodetect Subfolder
+cd $archive_output
+if [ "$(ls | wc -w)" -eq 1 ]; then
+  subfolder=$(ls)
+  cd $subfolder
+  modname=$(get_mod_name $PWD) 
+  rename "descriptor.mod" "$modname" *.mod 
+  cp -r * $modhome
+else
+  modname=$(get_mod_name $PWD)
+  rename "descriptor.mod" "$modname" *.mod
+  cp -r * $modhome
+fi
+echo "Mod installed: $(basename $archive_output)"
+
