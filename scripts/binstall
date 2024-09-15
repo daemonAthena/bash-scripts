@@ -10,7 +10,7 @@ function binary_install () {
   # Will install to a local .bin directory by default
   binpath="$HOME/.bin"
 
-  if [[ $1 == "--global" ]]; then
+  if [[ "$1" == "--global" ]]; then
     # Will install to /usr/bin so that the program is available for all users
     echo "installing to /usr/bin"
     shift

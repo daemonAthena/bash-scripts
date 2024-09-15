@@ -1,0 +1,11 @@
+#!/bin/bash
+
+ACTIVE_WORKSPACE=$(hyprctl activeworkspace | awk 'FNR == 1 {print $3}')
+WINDOW_ARRAY=$(hyprctl clients | grep -B5 "workspace: $ACTIVE_WORKSPACE" | grep Window | awk '{print $2}')
+
+for i in $WINDOW_ARRAY
+  do
+	  echo $i
+	  hyprctl dispatch setfloating address:0x$i
+done
+

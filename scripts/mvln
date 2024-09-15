@@ -1,0 +1,14 @@
+#!/bin/bash
+
+FILE=$1
+FILENAME=$(basename $FILE)
+if [[ -z $2 ]]; then
+  TARGET=$2
+else
+  TARGET="/games"
+fi
+
+# Move and Link
+mv $FILE $TARGET
+ln -sL $TARGET/$FILENAME $FILE
+
