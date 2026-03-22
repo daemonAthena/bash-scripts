@@ -1,6 +1,44 @@
 #!/bin/bash
+# A simple script to add, commit and push changes to the current branch.
 
-message=$1
+function main(){
+  inputs=$@
+  #default values
+  remote="origin"
+
+  # Main loop
+  while getopts "dsm:r:" opt; do
+    case "$opt" in
+      m) message="${OPTARG#=}" ;;
+      r) remote="${OPTARG#=}" ;;
+      d) dry_run=true ;;
+      s) sync=true ;;
+      */-h) echo "Usage" ; exit 1 ;;
+    esac
+  done
+  #shift $((OPTIND-1))
+  #Only included with positional args
+
+  if [[ $sync == true ]]; then
+    git pull $remote
+  elif [[ $dryrun == true ]]; then
+    return
+  fi
+  gitCommands $message $remote
+}
+
+function usage() {
+  echo "Usage: gityup [-m=commit message] [-r=remote] [-s] [-d]"
+  echo "  -m={msg}: Commit message"
+  echo "  -r={remote}: Remote name (default: origin)"
+  echo "  -s: Sync (pull) before push"
+  echo "  -d: Dry-run (no changes)"
+  echo "  -h: Show this help message"
+}
+
+function gitCommands() {
+message="$1"
+remote="$2"
 
 git add -A
 
@@ -10,4 +48,7 @@ else
   git commit --message="$message"
 fi
 
-git push origin
+git push "$remote"
+}
+
+main "$@"

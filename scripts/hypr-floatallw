@@ -1,4 +1,6 @@
 #!/bin/bash
+# For Hyprland users who want to float all windows in the current workspace.
+
 
 ACTIVE_WORKSPACE=$(hyprctl activeworkspace | awk 'FNR == 1 {print $3}')
 WINDOW_ARRAY=$(hyprctl clients | grep -B5 "workspace: $ACTIVE_WORKSPACE" | grep Window | awk '{print $2}')
