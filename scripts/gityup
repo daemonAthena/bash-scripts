@@ -7,7 +7,7 @@ function main(){
   remote="origin"
 
   # Main loop
-  while getopts "dsm:r:" opt; do
+  while getopts "dsm:r:h" opt; do
     case "$opt" in
       m) message="${OPTARG#=}" ;;
       r) remote="${OPTARG#=}" ;;
