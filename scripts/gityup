@@ -5,17 +5,17 @@ function main(){
   inputs=$@
   #default values
   remote="origin"
-
+  message="$1"
   # Main loop
-  while getopts "dsm:r:h" opt; do
-    case "$opt" in
-      m) message="${OPTARG#=}" ;;
-      r) remote="${OPTARG#=}" ;;
-      d) dry_run=true ;;
-      s) sync=true ;;
-      */-h) echo "Usage" ; exit 1 ;;
-    esac
-  done
+#  while getopts "dsm:r:h" opt; do
+#    case "$opt" in
+#      m) message="${OPTARG#=}" ;;
+#      r) remote="${OPTARG#=}" ;;
+#      d) dry_run=true ;;
+#      s) sync=true ;;
+#      */-h) echo "Usage" ; exit 1 ;;
+#    esac
+#  done
   #shift $((OPTIND-1))
   #Only included with positional args
 
@@ -24,7 +24,7 @@ function main(){
   elif [[ $dryrun == true ]]; then
     return
   fi
-  gitCommands $message $remote
+  gitCommands "$message" "$remote"
 }
 
 function usage() {
